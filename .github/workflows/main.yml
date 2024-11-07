@@ -21,7 +21,7 @@ jobs:
         ARGS: "-rlgoDzvc -i --delete"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        TARGET: "opt/app"
+        TARGET: "home/app"
         EXCLUDE: ".git/*,.github/*,.gitignore"
         SCRIPT_BEFORE: |
           whoami
