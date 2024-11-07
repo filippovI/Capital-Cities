@@ -6,7 +6,7 @@ ENV TZ 'UTC'
 ENV PYTHONUNBUFFERED=1
 
 RUN apk update \
-    && apk install -y gcc bash \
+    && apk install bash \
     && pip3 install --upgrade pip
 
 COPY requirements.txt requirements.txt
