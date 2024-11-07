@@ -13,5 +13,5 @@ COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-ENV PYTHONPATH "${PYTHONPATH}:/root/tgBots"
+ENV PYTHONPATH "${PYTHONPATH}:/opt/app"
 ENTRYPOINT ["python", "main.py"]
