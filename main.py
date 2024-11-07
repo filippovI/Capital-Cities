@@ -1,17 +1,19 @@
 import asyncio
+import os
 
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import ReplyKeyboardRemove
-from config import API_TOKEN
 from utils import shuffle_dict
 from database import Database
 from datetime import datetime as dt
 from keyboard import Keyboard
 
-API_TOKEN = API_TOKEN
+load_dotenv()
+API_TOKEN = os.getenv("bot_api")
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
