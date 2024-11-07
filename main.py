@@ -13,7 +13,7 @@ from datetime import datetime as dt
 from keyboard import Keyboard
 
 load_dotenv()
-API_TOKEN = str(os.getenv("bot_api"))
+API_TOKEN = str(os.getenv("API_TOKEN"))
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
