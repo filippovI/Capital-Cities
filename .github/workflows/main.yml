@@ -26,7 +26,7 @@ jobs:
         SCRIPT_BEFORE: |
           whoami
           ls -al
-          sudo docker ps -q --filter "name=bot" | xargs -r sudo docker stop
+          sudo docker ps -q --filter "name=CC" | xargs -r sudo docker stop
         SCRIPT_AFTER: |
           whoami
           ls -al
@@ -34,6 +34,6 @@ jobs:
           echo API_TOKEN=${{ SECRETS.API_TOKEN }} > .env
           sudo docker build -t bot .
           sudo docker rmi $(sudo docker images -f "dangling=true" -q)
-          sudo docker run -q --rm --name wb bot
+          sudo docker run -q --rm --name CC bot
         
       
