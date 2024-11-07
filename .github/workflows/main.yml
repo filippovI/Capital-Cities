@@ -30,7 +30,7 @@ jobs:
         SCRIPT_AFTER: |
           whoami
           ls -al
-          cd /root/tgBots
+          cd /root/app
           echo API_TOKEN=${{ SECRETS.API_TOKEN }} > .env
           sudo docker build -t bot
           sudo docker rmi $(sudo docker images -f "dangling=true" -q)
