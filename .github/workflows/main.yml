@@ -34,6 +34,6 @@ jobs:
           echo API_TOKEN=${{ SECRETS.API_TOKEN }} > .env
           sudo docker build -t bot .
           sudo docker rmi $(sudo docker images -f "dangling=true" -q)
-          sudo docker run -q --rm -- name wb bot
+          sudo docker run -q --rm --name wb bot
         
       
