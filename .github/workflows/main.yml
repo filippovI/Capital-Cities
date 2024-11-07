@@ -15,13 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Deploy to Server
-      uses: easingthemes/ssh-deploy@main
+      uses: @main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         ARGS: "-rlgoDzvc -i --delete"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        TARGET: "home/app"
+        TARGET: "app"
         EXCLUDE: ".git/*,.github/*,.gitignore"
         SCRIPT_BEFORE: |
           whoami
