@@ -21,7 +21,7 @@ jobs:
         ARGS: "-rlgoDzvc -i --delete"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        TARGET: "app"
+        TARGET: "/my_bots/capital_cities"
         EXCLUDE: ".git/*,.github/*,.gitignore"
         SCRIPT_BEFORE: |
           whoami
@@ -30,7 +30,7 @@ jobs:
         SCRIPT_AFTER: |
           whoami
           ls -al
-          cd /root/app
+          cd /my_bots/capital_cities
           echo API_TOKEN=${{ SECRETS.API_TOKEN }} > .env
           sudo docker build -t bot .
           sudo docker rmi $(sudo docker images -f "dangling=true" -q)
