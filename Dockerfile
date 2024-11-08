@@ -5,12 +5,12 @@ WORKDIR /app
 ENV TZ 'UTC'
 ENV PYTHONUNBUFFERED=1
 
-RUN apk update \
-    && apk add bash \
-    && pip3 install --upgrade pip
+RUN sudo apk update \
+    && sudo apk add bash \
+    && sudo pip3 install --upgrade pip
 
 COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN sudo pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
