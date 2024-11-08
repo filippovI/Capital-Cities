@@ -10,7 +10,7 @@ RUN apk update \
     && pip3 install --upgrade pip
 
 COPY requirements.txt requirements.txt
-RUN sudo pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
