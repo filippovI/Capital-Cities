@@ -2,7 +2,7 @@ FROM python:3.11.0rc2-slim-buster
 
 WORKDIR /opt/app
 
-ENV TZ 'UTC'
+ENV TZ='UTC'
 ENV PYTHONUNBUFFERED=1
 
 RUN apt update \
