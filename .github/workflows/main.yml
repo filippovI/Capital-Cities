@@ -26,7 +26,7 @@ jobs:
         SCRIPT_BEFORE: |
           whoami
           ls -al
-          docker ps -q --filter "name=CC" | xargs -r sudo docker stop
+          docker ps -q --filter "name=CC" | xargs -r docker stop
         SCRIPT_AFTER: |
           whoami
           ls -al
