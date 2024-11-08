@@ -21,7 +21,6 @@ dp = Dispatcher()
 
 class Continents(StatesGroup):
     count = State()
-#2
 
 @dp.message(Command("start"))
 async def start(message: types.Message, state: FSMContext):
