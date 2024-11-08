@@ -27,7 +27,7 @@ class Continents(StatesGroup):
 async def start(message: types.Message, state: FSMContext):
     await state.set_state(Continents.count)
     await bot.send_message(message.from_user.id,
-                           text='Можно выбрать один материк или перечислить несколько через пробеl:\n'
+                           text='Можно выбрать один материк или перечислить несколько через пробел:\n'
                                 '1 - Европа\n'
                                 '2 - Азия\n'
                                 '3 - Африка\n'
