@@ -22,6 +22,17 @@ dp = Dispatcher()
 class Continents(StatesGroup):
     count = State()
 
+@dp.message(Command("options"))
+async def options(message: types.Message):
+    with Database() as db:
+        if db.select_in_game(message.from_user.id) == 0:
+            if db.select_with_options(message.from_user.id) == 0:
+                db.update_with_options(message.from_user.id, 1)
+                await bot.send_message(message.from_user.id,'Варианты ответов включены')
+            else:
+                db.update_with_options(message.from_user.id, 0)
+                await bot.send_message(message.from_user.id, 'Варианты ответов выключены')
+
 @dp.message(Command("start"))
 async def start(message: types.Message, state: FSMContext):
     await state.set_state(Continents.count)
@@ -44,7 +55,8 @@ async def preparation(message: types.Message, state: FSMContext):
 
     # Записываем в БД (создаем нового юзера, если нет. Создаем под него вопросы и ответы, если нет. Иначе обновляем)
     with Database() as db:
-        db.insert('users', [message.from_user.id, message.from_user.username, 1, 0])
+        db.insert('properties', [message.from_user.id, message.from_user.username, 0])
+        db.insert('users', [message.from_user.id, message.from_user.username, 1])
         db.insert('questions', [message.from_user.id,
                                 ', '.join(questions_list),
                                 ', '.join(answers_list),

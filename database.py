@@ -22,8 +22,7 @@ class Database:
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 tg_id INTEGER NOT NULL UNIQUE,
                                 name TEXT,
-                                in_game INTEGER NOT NULL,
-                                with_options INTEGER NOT NULL)""")
+                                in_game INTEGER NOT NULL)""")
 
         self.con.execute("""CREATE TABLE IF NOT EXISTS questions (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,6 +33,12 @@ class Database:
                                 questions_count INTEGER,
                                 question_number INTEGER,
                                 correct_answers INTEGER)""")
+
+        self.con.execute("""CREATE TABLE IF NOT EXISTS properties (
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        tg_id INTEGER NOT NULL UNIQUE,
+                                        name TEXT,
+                                        with_options INTEGER DEFAULT 0 NOT NULL)""")
 
     # Получить номер вопроса
     def get_question_number(self, user_id):
@@ -46,13 +51,17 @@ class Database:
     # Функция для инсерта в таблицы
     def insert(self, table, values):
         if table == "users":
-            self.con.execute(f"""INSERT OR REPLACE INTO users (id, tg_id, name, in_game, with_options)
-                                 VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}), ?,?,?,?)""", values)
+            self.con.execute(f"""INSERT OR REPLACE INTO users (id, tg_id, name, in_game)
+                                 VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}),?,?,?)""", values)
 
         if table == "questions":
             self.con.execute(f"""INSERT OR REPLACE INTO questions 
                                 (id, tg_id, questions, answers, start_time, questions_count, question_number, correct_answers)
                                  VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}),?,?,?,?,?,?,?)""", values)
+        if table == "properties":
+            self.con.execute(f"""INSERT OR IGNORE INTO properties 
+                                (tg_id, name, with_options)
+                                VALUES (?,?,?)""",values)
 
     # Получить значение из столбца in_game (играет или нет)
     def select_in_game(self, user_id):
@@ -65,10 +74,15 @@ class Database:
     # Получить значение из столбца with_options (с вариантами ответов или без)
     def select_with_options(self, user_id):
         result = self.con.execute("""SELECT with_options
-                                     FROM users
+                                     FROM properties
                                      WHERE tg_id = ?""", (user_id,))
 
         return result.fetchone()[0]
+
+    def update_with_options(self, user_id, count):
+        self.con.execute("""UPDATE properties
+                                SET with_options = ?
+                                WHERE tg_id = ?""", (count, user_id,))
 
     # Получить текущий вопрос
     def select_question(self, user_id):
