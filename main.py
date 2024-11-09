@@ -18,7 +18,6 @@ API_TOKEN = str(os.getenv("API_TOKEN"))
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
-with_options = True
 
 class Continents(StatesGroup):
     count = State()
@@ -56,7 +55,7 @@ async def preparation(message: types.Message, state: FSMContext):
         # Отправляем первый вопрос. Завершаем стейт
         kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
                                       db.get_question_number(message.from_user.id),
-                                      with_options)
+                                      db.select_with_options(message.from_user.id))
         await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                reply_markup=kb.as_markup(resize_keyboard=True))
     await state.clear()
@@ -74,7 +73,7 @@ async def quiz(message: types.Message):
                     db.update_question_number(message.from_user.id, correct=True)
                     kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
                                                   db.get_question_number(message.from_user.id),
-                                                  with_options)
+                                                  db.select_with_options(message.from_user.id))
                     await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                            reply_markup=kb.as_markup(resize_keyboard=True))
 
@@ -84,7 +83,7 @@ async def quiz(message: types.Message):
                     db.update_question_number(message.from_user.id)
                     kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
                                                   db.get_question_number(message.from_user.id),
-                                                  with_options)
+                                                  db.select_with_options(message.from_user.id))
                     await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                            reply_markup=kb.as_markup(resize_keyboard=True))
 

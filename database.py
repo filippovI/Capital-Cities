@@ -62,6 +62,14 @@ class Database:
 
         return result.fetchone()[0]
 
+    # Получить значение из столбца with_options (с вариантами ответов или без)
+    def select_with_options(self, user_id):
+        result = self.con.execute("""SELECT with_options
+                                     FROM users
+                                     WHERE tg_id = ?""", (user_id,))
+
+        return result.fetchone()[0]
+
     # Получить текущий вопрос
     def select_question(self, user_id):
         result = self.con.execute("""SELECT questions

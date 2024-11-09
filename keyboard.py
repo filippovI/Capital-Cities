@@ -6,9 +6,9 @@ from aiogram import types
 class Keyboard:
 
     @staticmethod
-    def create_keyboard(answers: list, question_number: int, with_options: bool):
+    def create_keyboard(answers: list, question_number: int, with_options: int):
         builder = ReplyKeyboardBuilder()
-        if with_options:
+        if with_options == 1:
             for i in Keyboard.shuffle_keyboard(answers, question_number):
                 builder.add(types.KeyboardButton(text=str(i)))
             builder.adjust(2)
