@@ -3,17 +3,15 @@ import random
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from aiogram import types
 
-
 class Keyboard:
 
     @staticmethod
-    def create_keyboard(answers: list, question_number: int):
+    def create_keyboard(answers: list, question_number: int, with_options: bool):
         builder = ReplyKeyboardBuilder()
-        for i in Keyboard.shuffle_keyboard(answers, question_number):
-            builder.add(types.KeyboardButton(text=str(i)))
-        builder.adjust(2)
-        builder.row(types.KeyboardButton(text="Подсказка"))
-        builder.row(types.KeyboardButton(text="Завершить"))
+        if with_options:
+            for i in Keyboard.shuffle_keyboard(answers, question_number):
+                builder.add(types.KeyboardButton(text=str(i)))
+            builder.adjust(2)
 
         return builder
 

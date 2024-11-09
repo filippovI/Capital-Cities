@@ -54,7 +54,8 @@ async def preparation(message: types.Message, state: FSMContext):
                                 0])
         # Отправляем первый вопрос. Завершаем стейт
         kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
-                                      db.get_question_number(message.from_user.id))
+                                      db.get_question_number(message.from_user.id),
+                                      with_options)
         await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                reply_markup=kb.as_markup(resize_keyboard=True))
     await state.clear()
@@ -71,21 +72,23 @@ async def quiz(message: types.Message):
                 if message.text == db.select_answers(message.from_user.id):
                     db.update_question_number(message.from_user.id, correct=True)
                     kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
-                                                  db.get_question_number(message.from_user.id))
+                                                  db.get_question_number(message.from_user.id),
+                                                  with_options)
                     await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                            reply_markup=kb.as_markup(resize_keyboard=True))
 
-                # Если пользователь написал 1 выводим верный ответ, обновляем счетчик и пишем следующий вопрос
-                if message.text == 'Подсказка':
+                # Если пользователь написал "Подсказка" выводим верный ответ, обновляем счетчик и пишем следующий вопрос
+                if message.text == '/help':
                     await bot.send_message(message.from_user.id, db.select_answers(message.from_user.id))
                     db.update_question_number(message.from_user.id)
                     kb = Keyboard.create_keyboard(db.select_answers(message.from_user.id, False),
-                                                  db.get_question_number(message.from_user.id))
+                                                  db.get_question_number(message.from_user.id),
+                                                  with_options)
                     await bot.send_message(message.from_user.id, db.select_question(message.from_user.id),
                                            reply_markup=kb.as_markup(resize_keyboard=True))
 
                 # Если пользователь нажал "Завершить"
-                if message.text == 'Завершить':
+                if message.text == '/stop':
                     await the_end(message)
 
     except IndexError:
@@ -106,7 +109,7 @@ async def the_end(message):
 
 async def main():
     await dp.start_polling(bot)
-#2
+
 
 if __name__ == "__main__":
     asyncio.run(main())
