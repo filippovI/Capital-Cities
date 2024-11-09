@@ -22,7 +22,8 @@ class Database:
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 tg_id INTEGER NOT NULL UNIQUE,
                                 name TEXT,
-                                in_game INTEGER NOT NULL)""")
+                                in_game INTEGER NOT NULL,
+                                with_options INTEGER NOT NULL)""")
 
         self.con.execute("""CREATE TABLE IF NOT EXISTS questions (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,6 +35,7 @@ class Database:
                                 question_number INTEGER,
                                 correct_answers INTEGER)""")
 
+    # Получить номер вопроса
     def get_question_number(self, user_id):
         result = self.con.execute("""SELECT question_number
                                      FROM questions
@@ -41,16 +43,18 @@ class Database:
 
         return result.fetchone()[0]
 
+    # Функция для инсерта в таблицы
     def insert(self, table, values):
         if table == "users":
-            self.con.execute(f"""INSERT OR REPLACE INTO users (id, tg_id, name, in_game)
-                                 VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}), ?,?,?)""", values)
+            self.con.execute(f"""INSERT OR REPLACE INTO users (id, tg_id, name, in_game, with_options)
+                                 VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}), ?,?,?,?)""", values)
 
         if table == "questions":
             self.con.execute(f"""INSERT OR REPLACE INTO questions 
                                 (id, tg_id, questions, answers, start_time, questions_count, question_number, correct_answers)
                                  VALUES ((SELECT id FROM questions WHERE tg_id = {values[0]}),?,?,?,?,?,?,?)""", values)
 
+    # Получить значение из столбца in_game (играет или нет)
     def select_in_game(self, user_id):
         result = self.con.execute("""SELECT in_game
                                      FROM users
@@ -58,6 +62,7 @@ class Database:
 
         return result.fetchone()[0]
 
+    # Получить текущий вопрос
     def select_question(self, user_id):
         result = self.con.execute("""SELECT questions
                                      FROM questions
@@ -65,6 +70,7 @@ class Database:
 
         return result.fetchone()[0].split(', ')[self.get_question_number(user_id)]
 
+    # Получить текущий ответ
     def select_answers(self, user_id, one=True):
         result = self.con.execute("""SELECT answers
                                          FROM questions
@@ -73,6 +79,7 @@ class Database:
         return result.fetchone()[0].split(', ')[self.get_question_number(user_id)] \
             if one else result.fetchone()[0].split(', ')
 
+    # Обновить номер вопроса
     def update_question_number(self, user_id, correct=False):
         if correct:
             self.con.execute("""UPDATE questions
@@ -84,6 +91,7 @@ class Database:
                                 SET question_number = (SELECT question_number + 1 FROM questions WHERE tg_id = ?)
                                 WHERE tg_id = ?""", [user_id] * 2)
 
+    # Функция окончания игры
     def the_end(self, user_id):
         result = self.con.execute("""SELECT 
                                      start_time, 

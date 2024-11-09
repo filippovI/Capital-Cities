@@ -18,6 +18,7 @@ API_TOKEN = str(os.getenv("API_TOKEN"))
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
+with_options = True
 
 class Continents(StatesGroup):
     count = State()
@@ -44,7 +45,7 @@ async def preparation(message: types.Message, state: FSMContext):
 
     # Записываем в БД (создаем нового юзера, если нет. Создаем под него вопросы и ответы, если нет. Иначе обновляем)
     with Database() as db:
-        db.insert('users', [message.from_user.id, message.from_user.username, 1])
+        db.insert('users', [message.from_user.id, message.from_user.username, 1, 0])
         db.insert('questions', [message.from_user.id,
                                 ', '.join(questions_list),
                                 ', '.join(answers_list),
