@@ -14,7 +14,7 @@ from keyboard import Keyboard
 
 load_dotenv()
 API_TOKEN = str(os.getenv("API_TOKEN"))
-#1
+
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
